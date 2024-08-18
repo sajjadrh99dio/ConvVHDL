@@ -1,0 +1,66 @@
+LIBRARY IEEE;
+USE IEEE.std_logic_1164.ALL;
+USE STD.TEXTIO.ALL;
+USE IEEE.STD_LOGIC_TEXTIO.ALL;
+
+ENTITY TB IS
+END ENTITY TB;
+
+ARCHITECTURE test OF TB IS
+
+	SIGNAL clk : STD_LOGIC := '0';
+	SIGNAL rst : STD_LOGIC:= '0';
+
+	SIGNAL	data_in :  std_logic_vector (7 downto 0):=(others=>'0');
+	SIGNAL	addr_wr :  std_logic_vector (3 downto 0):=(others=>'0');
+	SIGNAL write_enable :  std_logic:= '0';
+	
+	SIGNAL data_rd1 :  std_logic_vector (7 downto 0):=(others=>'0');
+	SIGNAL addr_rd1 :  std_logic_vector  (3 downto 0):=(others=>'0');
+	SIGNAL read1    :  std_logic:= '0';
+	
+	SIGNAL data_rd2 :  std_logic_vector (7 downto 0):=(others=>'0');
+	SIGNAL addr_rd2 :  std_logic_vector  (3 downto 0):=(others=>'0');
+	SIGNAL read2    :  std_logic:= '0';
+	
+	SIGNAL data_rd3 :  std_logic_vector (7 downto 0):=(others=>'0');
+	SIGNAL addr_rd3 :  std_logic_vector  (3 downto 0):=(others=>'0');
+	SIGNAL read3    :  std_logic:= '0';
+
+BEGIN	
+	clk <= NOT clk AFTER 1 NS WHEN NOW <= 300 NS ELSE '0';
+	rst <= '1', '0' AFTER 2 NS;
+	input <= "00000001" AFTER 8 NS;
+	conv_start <= '1' AFTER 4 NS, '0' AFTER 8 NS;
+		
+			CONV_UNIT :  ENTITY WORK.Img_RAM
+										  
+         PORT MAP(clk,rst,data_in,addr_wr,write_enable,data_rd1,addr_rd1,read1,data_rd2,addr_rd2,read2,data_rd3,addr_rd3,read3);
+
+		
+END ARCHITECTURE test;	
+
+
+
+
+PORT(
+	clk : in std_logic;
+	rst : in std_logic;
+
+	data_in : in std_logic_vector (7 downto 0);
+	addr_wr : in std_logic_vector (3 downto 0);
+	write_enable : in std_logic;
+	
+	data_rd1 : out std_logic_vector (7 downto 0);
+	addr_rd1 : in std_logic_vector  (3 downto 0);
+	read1    : in std_logic;
+	
+	data_rd2 : out std_logic_vector (7 downto 0);
+	addr_rd2 : in std_logic_vector  (3 downto 0);
+	read2    : in std_logic;
+	
+	data_rd3 : out std_logic_vector (7 downto 0);
+	addr_rd3 : in std_logic_vector  (3 downto 0);
+	read3    : in std_logic
+
+);

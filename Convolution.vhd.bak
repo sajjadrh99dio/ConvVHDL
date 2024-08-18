@@ -1,0 +1,121 @@
+library IEEE;
+use IEEE.STD_LOGIC_STD.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+
+entity Convolution_Kernel is
+	generic(
+				DATA_WIDTH  	: integer :=8;
+				KERNEL_WIDTH 	: integer :=3;
+				IMAGE_WIDTH    : integer :=4;
+				STRIDE 			: integer :=1;
+				KERNEL_VALUES  : integer_matrix := ((1,1,1,),(1,1,1),(1,1,1))
+			 );
+			 
+			 port (
+						clk 			: in std_logic;
+						rst			: in std_logic;
+						conv_start	: in std_logic;
+						
+						output		: out std_logic_vector((DATA_WIDTH * (IMAGE_WIDTH - STRIDE + 1)) -1 downto 0);
+						read_img    : out std_logic;
+						address     : out std_logic_vector(
+						input			: in std_logic_vector(DATA_WIDTH-1 downto 0);
+				   );
+end Convolution_Kernel
+
+architecture Behavioral of Convolution_Kernel is
+	-- KERNEL MATRIX
+	type kernel_type is array(0 to KERNEL_WIDTH-1, 0 to KERNEL_WIDTH-1) of integer;
+	signal kernel : kernel_type := KERNEL_VALUES;
+	-- IMAGE LOADING ARRAY
+	type image_type is array (0 to IMAGE_WIDTH -1 , 0 to IMAGE_WIDTH-1) of std_logic_vector(DATA_WIDTH-1);
+	signal input_image : image_type := (others => (others => '0'));
+	
+	TYPE State_type IS (IDLE,IMAGE_AQUISITION,CONVOLUTION_CAL,FINAL);
+	signal state : state_type;
+	
+	signal sum : integer range 0 to 255;
+	signal conv : integer range 0 to 255;
+	signal conv_start_regged : std_logic :='0' ;
+	
+	begin
+	process (clk,rst) begin
+		if (rst='1') then
+			input_image <= (others => (others => '0'));
+			conv_start_regged <='0';
+		elsif(clk'EVENT and clk='1') then
+			conv_start_regged<=conv_start;
+			if(conv_start_regged = '1' and conv_start='0') then
+				
+				for i in 0 to IMAGE_WIDTH-1 loop
+					for j in 0 to IMAGE_WIDTH-1 loop
+						address <= std_logic_vector(to_unsigned(i, address'length));
+	
+	
+	State_CONTROL : process (clk, reset) is
+							begin
+							
+							if (rst='1') then
+									input_image <= (others => (others => '0'));
+									conv_start_regged <='0';
+									address_signal<=(others =>'0');
+									conv_start_regged <='0';
+									
+							elsif(clk'EVENT and clk='1') then
+								
+								case state is
+									when IDLE =>
+										if(conv_start='1') then
+											conv_start_regged <= '1'; 
+										end if;
+									
+										if(conv_start_regged = '1' and conv_start='0') then
+											conv_start_regged<='0';
+											state <= IMAGE_AQUISITION;
+										end if;
+									when IMAGE_AQUISITION =>
+											
+				
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+--	process(clk,rst)
+--	variable temp : integer range 0 to 255;
+--		
+--		begin
+--		
+--		
+--		if (rst = '1') then
+--			sum<='0';
+--			conv<='0';
+--		elsif (clk'EVENT and clk ='1') then
+--			conv_start_regged <= conv_start;
+--			if (conv_start_regged ='1' and conv_start = '0' ) then
+--				temp :=0;
+--				for i in 0 to KERNEL_WIDTH-1 loop
+--					for j in 0 to KERNEL_WIDTH-1 loop
+--						temp := temp + ( to_integer(unsigned (input((( i*IMAGE_WIDTH)+j)
+--	
+--	
+	
+	
+	
+	
+	
+	
+	
+	
+	

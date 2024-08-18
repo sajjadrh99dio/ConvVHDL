@@ -1,0 +1,127 @@
+------------------------------- Pattern detector Top module --------------------------------------
+--------------------------------- Prepared by Sajjad Roohi ---------------------------------------
+------------------------------------- SN : 810101175 ---------------------------------------------
+---------------------- Computer assignment 2 of VHDL course by Dr.Navabi -------------------------
+---------------------------------- University of Tehran ------------------------------------------
+--------------------------------------- April 2024 -----------------------------------------------
+
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+ 
+entity Pattern_detector is
+  port (
+	clock 			: in std_logic;
+	reset 			: in std_logic;
+	start				: in std_logic;
+	data_in			: in std_logic_vector(7 downto 0);
+	addr_wr			: in std_logic_vector(3 downto 0);
+	write_enable	: in std_logic;
+	done				: out std_logic;
+	Result			: out std_logic_vector(2 downto 0);
+    );
+end Pattern_detector;
+
+
+
+architecture description of Pattern_detector is
+
+
+
+---------------------------------- component declaration ----------------------------------------
+component Img_RAM IS PORT(
+	clk : in std_logic;
+	rst : in std_logic;
+
+	data_in : in std_logic_vector (7 downto 0);
+	addr_wr : in std_logic_vector (3 downto 0);
+	write_enable : in std_logic;
+	
+	data_rd1 : out std_logic_vector (7 downto 0);
+	addr_rd1 : in std_logic_vector  (3 downto 0);
+	read1    : in std_logic;
+	
+	data_rd2 : out std_logic_vector (7 downto 0);
+	addr_rd2 : in std_logic_vector  (3 downto 0);
+	read2    : in std_logic;
+	
+	data_rd3 : out std_logic_vector (7 downto 0);
+	addr_rd3 : in std_logic_vector  (3 downto 0);
+	read3    : in std_logic
+
+);
+END component;
+-------------------------------------------------------------------------------------------------
+component Convolution is
+			generic(
+				DATA_WIDTH  	: integer :=8;
+				KERNEL_WIDTH 	: integer :=3;
+				IMAGE_WIDTH    : integer :=4;
+				STRIDE 			: integer :=1;
+				BIAS           : integer :=0;
+				KERNEL_VALUES  : integer_matrix := ((1,1,1),(1,1,1),(1,1,1))
+				);
+			 
+			 port (
+						clk 			: in std_logic;
+						rst			: in std_logic;
+						conv_start	: in std_logic;
+						conv_done	: out std_logic;
+						output0		: out std_logic_vector(DATA_WIDTH-1 downto 0);
+						output1		: out std_logic_vector(DATA_WIDTH-1 downto 0);
+						output2		: out std_logic_vector(DATA_WIDTH-1 downto 0);
+						output3		: out std_logic_vector(DATA_WIDTH-1 downto 0);
+						read_img    : out std_logic;
+						address     : out std_logic_vector(7 downto 0);
+						input			: in std_logic_vector(DATA_WIDTH-1 downto 0)
+				   );
+end component;
+-------------------------------------------------------------------------------------------------
+component Relu is			 
+			 port (
+						input0 			: in std_logic_vector (7 downto 0);
+						input1			: in std_logic_vector (7 downto 0);
+						input2 			: in std_logic_vector (7 downto 0);
+						input3 			: in std_logic_vector (7 downto 0);
+						
+						output0 			: out std_logic_vector (7 downto 0);
+						output1			: out std_logic_vector (7 downto 0);
+						output2 			: out std_logic_vector (7 downto 0);
+						output3 			: out std_logic_vector (7 downto 0)
+				   );
+end Relu;
+-------------------------------------------------------------------------------------------------
+component MaxPool is			 
+			 port (
+						input0 			: in std_logic_vector (7 downto 0);
+						input1			: in std_logic_vector (7 downto 0);
+						input2 			: in std_logic_vector (7 downto 0);
+						input3 			: in std_logic_vector (7 downto 0);
+						output 			: out std_logic_vector (7 downto 0)
+
+				   );
+end component;
+-------------------------------------------------------------------------------------------------
+entity Result is			 
+			 port (
+						input0 			: in std_logic_vector (7 downto 0);
+						input1			: in std_logic_vector (7 downto 0);
+						input2 			: in std_logic_vector (7 downto 0);
+						output 			: out std_logic_vector (2 downto 0)
+
+				   );
+end Result;
+-------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+end desciption

@@ -1,0 +1,38 @@
+LIBRARY IEEE;
+USE IEEE.std_logic_1164.ALL;
+USE STD.TEXTIO.ALL;
+USE IEEE.STD_LOGIC_TEXTIO.ALL;
+
+ENTITY TB IS
+END ENTITY TB;
+
+ARCHITECTURE test OF TB IS
+
+	SIGNAL clk : STD_LOGIC := '0';
+	SIGNAL rst : STD_LOGIC;
+	SIGNAL conv_start	: std_logic;
+						
+	SIGNAL output : std_logic_vector(7 downto 0);
+	SIGNAL read_img : std_logic;
+	SIGNAL address  : std_logic_vector(7 downto 0);
+	SIGNAL input :  std_logic_vector(7 downto 0);
+
+BEGIN	
+	clk <= NOT clk AFTER 1 NS WHEN NOW <= 100 NS ELSE '0';
+	rst <= '0', '1' AFTER 2 NS;
+	input<= "00001101" after 4 ns;
+	conv_start <= '1' AFTER 4 NS, '0' AFTER 8 NS;
+		
+			CONV_UNIT :  ENTITY WORK.Convolution 
+										  generic map(
+													DATA_WIDTH => 8,
+													KERNEL_WIDTH => 3,
+													IMAGE_WIDTH => 4,
+													STRIDE => 1,
+													BIAS => 0,
+													KERNEL_VALUES => ((1,1,1),(1,1,1),(1,1,1))
+													)
+                                PORT MAP(clk,rst,conv_start,output,read_img,address,input);
+		
+		
+END ARCHITECTURE test;	
